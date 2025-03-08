@@ -4,19 +4,17 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 
-import static java.nio.file.Files.createDirectory;
-
 /**
  * Create, delete, rename, move, copy Files
  */
 public class FileOperations {
 
-    public static boolean createFile(String filepath) {
-        File file = new File(filepath);
+    public static boolean createFile(String filepath, String fileName) {
+        File file = new File(filepath, fileName);
 
         try {
             if (file.createNewFile()) {
-                System.out.println("File Create: " + file.getAbsolutePath());
+                System.out.println("File Created: " + file.getAbsolutePath());
                 return true;
             } else {
                 System.out.println("File already exists.");
@@ -45,8 +43,7 @@ public class FileOperations {
         }
     }
 
-    public static boolean delete (String path) {
-        File file = new File(path);
+    public static boolean deleteFile(File file) {
 
         if (!file.exists()) {
             System.out.println("File/Directory does not exist.");
@@ -55,7 +52,7 @@ public class FileOperations {
 
         try {
             if (file.isDirectory()) {
-                deleteRecursive(path);
+                deleteRecursive(file);
             }
             if (file.delete()) {
                 System.out.println("Deleted: " + file.getAbsolutePath());
@@ -70,19 +67,13 @@ public class FileOperations {
         }
     }
 
-    private static boolean deleteRecursive(String path) {
-        File file = new File(path);
-
-        if (!file.exists()) {
-            System.out.println("File/Directory does not exist.");
-            return false;
-        }
+    private static boolean deleteRecursive(File file) {
 
         if (file.isDirectory()) {
             File[] contents = file.listFiles();
             if (contents != null) {
                 for (File f : contents) {
-                    deleteRecursive(f.getAbsolutePath());
+                    deleteRecursive(f);
                 }
             }
         }
